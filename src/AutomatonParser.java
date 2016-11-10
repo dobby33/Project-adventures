@@ -57,4 +57,6 @@ public class AutomatonParser {
 
         return _automoton;
     }
+
+    public Automaton
 }
