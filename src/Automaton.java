@@ -108,7 +108,14 @@ public class Automaton
     @Override
     public String toString()
     {
-        return "Start: " + _start + "\nFinish: " + _finish + "\nEdges: " +  _edges + '}';
+        String result = "";
+        result += "Start: " + _start;
+        result += "\nFinish: " + _finish;
+        result += "\nEdges: ";
+        for (Edge edge : _edges)
+            result += "\n\t" + edge;
+        result += "\n";
+        return result;
     }
 }
 
