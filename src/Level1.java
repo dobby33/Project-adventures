@@ -51,7 +51,7 @@ public class Level1 {
             aut3.addEdge("2", "2", "A"); // <--
             aut3.addEdge("2", "2", "R"); // <--
             aut3.addEdge("2", "2", "K"); // <--
-            aut3.addEdge("2", "3", "G"); // <--
+            aut3.addEdge("2", "2", "G"); // <--
             aut3.addEdge("2", "2", "T"); // <--
 
             aut3.addEdge("3", "3", "D"); // <--
@@ -87,14 +87,18 @@ public class Level1 {
             aut4.addEdge("3", "4", "R"); // RIVER --> 4
 
             aut4.addEdge("4", "3", "D"); // DRAGON --> 3
-            aut4.addEdge("4", "4", "S"); // SWORD --> 2
+            aut4.addEdge("4", "2", "S"); // SWORD --> 2
             aut4.addEdge("4", "1", "A"); // --> 1
             aut4.addEdge("4", "1", "R"); // --> 1
             aut4.addEdge("4", "1", "K"); // --> 1
             aut4.addEdge("4", "1", "G"); // --> 1
             aut4.addEdge("4", "1", "T"); // --> 1
             Automaton result = aut1.intersection(aut2).intersection(aut3).intersection(aut4);
-            System.out.println(result.getShortestExample(true));
+            String shortestPath = result.getShortestExample(true);
+            if (shortestPath == null)
+                System.out.println("null");
+            else
+                System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
