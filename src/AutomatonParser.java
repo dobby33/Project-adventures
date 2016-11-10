@@ -7,42 +7,26 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class AutomatonParser {
-    private ArrayList<String> fileLines;
+    private ArrayList<String> _fileLines;
+    private Automaton _automoton;
 
     public AutomatonParser(String filename){
         /*De constructor leest een .aut bestand filename in.*/
-        try {
 
+        _automoton = new Automaton();
+        try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String line;
             while ((line = bufferedReader.readLine()) != null){
-                fileLines.add(line);
+                _fileLines.add(line);
             }
             bufferedReader.close();
-            String[] split = new String[0];
-            for (String newLine : fileLines){
-                split = newLine.split("\\s+");
-
-            }
-
         } catch (FileNotFoundException e){
-            System.out.println("Opgegeben bestand is niet gevonden");
+            System.out.println("Opgegeven bestand is niet gevonden");
         } catch (IOException e){
-            System.out.println( e.getMessage() );
+            System.out.println(e.getMessage() );
         }
-    }
-
-    public Automaton intersection(Automaton aut)
-    {
-        /*Deze methode geeft een eindige automaat terug waarvan de taal gelijk is aan de intersectie
-        van de taal L1 van de automaat van de klasse en taal L2 van de automaat aut.
-        Hint: gebruik de productconstructie. Merk echter op dat de productconstructie in het boek
-        van Sipser zich beperkt tot DFA’s. Bekijk zelf hoe je het idee van de productconstructie kunt
-        toepassen op NFA’s. (Een alternatieve methode van NFA’s eerst omzetten naar DFA’s en dan
-        de productconstructie van Sipser uitvoeren is waarschijnlijk te traag voor de voorbeeldadventures.)*/
-        return null;
-
     }
 
     public void parse() throws Exception{
@@ -50,16 +34,27 @@ public class AutomatonParser {
         in de constructor). Indien blijkt dat het bestand niet van het juiste formaat is (welke zal
                 resulteren in een fout tijdens het parsen), dan wordt een Exception geworpen.*/
 
+        String[] split = new String[0];
+        for (String newLine : _fileLines){
+            split = newLine.split("\\s+");
+            if (split.length != 3){
+                throw new Exception("Invalid line: " + newLine);
+            }
+            if (split[0].equals("(START)")){
+                _automoton.setStart(split[2]);
+            }
+            else if (split[2].equals("(FINAL)")){
+                _automoton.setFinish(split[0]);
+            }
+            else {
+                _automoton.addEdge(split[0], split[2], split[1]);
+            }
+        }
     }
 
     public Automaton automaton(){
         /*Deze methode geeft de eindige automaat berekend met parse() terug.*/
-        return null;
 
-    }
-
-    public String getShortestExample(Boolean accept){
-        /*Deze methode schrijft een kortste string uit die door de automaat wel (niet, respectievelijk)*/
-        return null;
+        return _automoton;
     }
 }
