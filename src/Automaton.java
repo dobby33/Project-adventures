@@ -6,7 +6,7 @@ import java.util.List;
  */
 public class Automaton
 {
-    // TODO:
+    // TODO: changed: numberofstates en shortest
 
     private List<Edge> _edges;
     private String _start;
@@ -85,8 +85,6 @@ public class Automaton
      */
     private void shortestAccept(String state, String combinatie, int nEdges)
     {
-        if ("$".equals(state)) // lege string wordt niet meegeteld
-            nEdges--;
         if (nEdges >= _minNEdges)
             return;
         if (state.equals(_finish))  // en nEdges is kleiner den _minEdges
@@ -97,8 +95,13 @@ public class Automaton
         }
 
         for (Edge edge : _edges)
-            if (edge.from.equals(state))
-                shortestAccept(edge.to, combinatie + edge.weigth, nEdges + 1);
+        {
+            if (edge.from.equals(state) && "$".equals(edge.weigth))
+                shortestAccept(edge.to, combinatie + edge.weigth, nEdges);
+            else if (edge.from.equals(state))
+                shortestAccept(edge.to, combinatie + edge.weigth, nEdges+1);
+
+        }
     }
 
     /**
