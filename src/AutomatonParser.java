@@ -14,6 +14,7 @@ public class AutomatonParser {
         /*De constructor leest een .aut bestand filename in.*/
 
         _automoton = new Automaton();
+        _fileLines = new ArrayList<>();
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -56,9 +57,5 @@ public class AutomatonParser {
         /*Deze methode geeft de eindige automaat berekend met parse() terug.*/
 
         return _automoton;
-    }
-
-    public void display(){
-        System.out.println(_automoton.toString());
     }
 }
