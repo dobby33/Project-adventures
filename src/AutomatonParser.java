@@ -14,6 +14,7 @@ public class AutomatonParser {
         van Sipser zich beperkt tot DFA’s. Bekijk zelf hoe je het idee van de productconstructie kunt
         toepassen op NFA’s. (Een alternatieve methode van NFA’s eerst omzetten naar DFA’s en dan
         de productconstructie van Sipser uitvoeren is waarschijnlijk te traag voor de voorbeeldadventures.)*/
+        return null;
 
     }
 
@@ -26,13 +27,12 @@ public class AutomatonParser {
 
     public Automaton automaton(){
         /*Deze methode geeft de eindige automaat berekend met parse() terug.*/
+        return null;
 
     }
 
-    conflict
-
     public String getShortestExample(Boolean accept){
         /*Deze methode schrijft een kortste string uit die door de automaat wel (niet, respectievelijk)*/
-
+        return null;
     }
 }
