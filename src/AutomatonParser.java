@@ -1,4 +1,4 @@
-
+/* Dit project is gemaakt door Bas Van Assche en Tom Martens*/
 public class AutomatonParser {
     public AutomatonParser(String filename){
         /*De constructor leest een .aut bestand filename in.*/
