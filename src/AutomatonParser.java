@@ -1,9 +1,36 @@
 /* Dit project is gemaakt door Bas Van Assche en Tom Martens*/
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class AutomatonParser {
+    private ArrayList<String> fileLines;
+
     public AutomatonParser(String filename){
         /*De constructor leest een .aut bestand filename in.*/
+        try {
 
+            FileReader fileReader = new FileReader(filename);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+            String line;
+            while ((line = bufferedReader.readLine()) != null){
+                fileLines.add(line);
+            }
+            bufferedReader.close();
+            String[] split = new String[0];
+            for (String newLine : fileLines){
+                split = newLine.split("\\s+");
+
+            }
+
+        } catch (FileNotFoundException e){
+            System.out.println("Opgegeben bestand is niet gevonden");
+        } catch (IOException e){
+            System.out.println( e.getMessage() );
+        }
     }
 
     public Automaton intersection(Automaton aut)
