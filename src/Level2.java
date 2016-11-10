@@ -94,7 +94,6 @@ public class Level2 {
             aut4.addEdge("3", "3", "G"); // <--
             aut4.addEdge("3", "3", "T"); // <--
             Automaton result = aut1.intersection(aut2).intersection(aut3).intersection(aut4);
-            System.out.println(result.toString());
             String shortestPath = result.getShortestExample(true);
             if (shortestPath == null)
                 System.out.println("null");
