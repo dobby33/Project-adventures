@@ -6,6 +6,8 @@ import java.util.List;
  */
 public class Automaton
 {
+    // TODO:
+
     private List<Edge> _edges;
     private String _start;
     private String _finish;
@@ -60,7 +62,7 @@ public class Automaton
         if (accept)
         {
             _minNEdges = getNumberOfStates();
-            _minCombinatie = "";
+            _minCombinatie = null;
             shortestAccept(_start, "", 0);
             return _minCombinatie;
         }
@@ -72,7 +74,7 @@ public class Automaton
 
     /**
      * Bij de eerste aanroep is
-     *      private String _minCombinatie = ""
+     *      private String _minCombinatie = null
      *      private int _minNEdges = het aantal edges
      *
      *      nEdges = 0
