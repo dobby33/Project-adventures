@@ -7,12 +7,19 @@ import java.util.List;
 public class Automaton
 {
     private List<Edge> _edges;
-    private int _start;
-    private int _finish;
+    private String _start;
+    private String _finish;
 
     public Automaton()
     {
         _edges = new ArrayList<>();
+    }
+
+    public Automaton(Automaton other)
+    {
+        _edges = new ArrayList<>(other._edges);
+        _start = other._start;
+        _finish = other._finish;
     }
 
     /**
@@ -24,7 +31,19 @@ public class Automaton
      */
     public Automaton intersection(Automaton aut)
     {
-        return null;
+        Automaton result = new Automaton();
+        result._start = concatNodes(_start, aut._start);
+        result._finish = concatNodes(_finish, aut._finish);
+
+        for (Edge edge1: _edges)
+            for (Edge edge2 : aut._edges)
+                if (edge1.weigth.equals(edge2.weigth))
+                    result.addEdge(
+                            concatNodes(edge1.from, edge2.from),
+                            concatNodes(edge1.to, edge2.to),
+                            edge1.weigth
+                    );
+        return result;
     }
 
     /**
@@ -40,33 +59,56 @@ public class Automaton
         return null;
     }
 
-    public void addEdge(int from, int to, String weight)
+    /**
+     * Voegt een nieuwe node toe aan de automaat
+     * @param from : De String node vanwaar de boog vertrekt
+     * @param to : De string van de aankomst node
+     * @param weight : De string die het karakter voorstelt
+     */
+    public void addEdge(String from, String to, String weight)
     {
         _edges.add(new Edge(from, to, weight));
     }
 
-    public void setStart(int start)
+    public void setStart(String start)
     {
         _start = start;
     }
 
-    public void setFinish(int finish)
+    public void setFinish(String finish)
     {
         _finish = finish;
     }
 
     private class Edge
     {
-        Edge(int from, int to, String weigth)
+        Edge(String from, String to, String weigth)
         {
             this.from = from;
             this.to = to;
             this.weigth = weigth;
         }
 
-        int from;
-        int to;
+        String from;
+        String to;
         String weigth;
+
+        @Override
+        public String toString()
+        {
+            return "Edge{" + from + "--" + weigth + "-->" + _finish + '}';
+        }
+    }
+
+    private String concatNodes(String x, String y)
+    {
+        return "(" + x + "," + y + ")";
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Start: " + _start + "\nFinish: " + _finish + "\nEdges: " +  _edges + '}';
     }
 }
 
