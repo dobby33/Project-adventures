@@ -1,17 +1,12 @@
 /* Dit project is gemaakt door Bas Van Assche en Tom Martens*/
 
 public class AutomatonParser {
-    dit is
-    publ
-    een merge
-    ic Automaton
-
     public AutomatonParser(String filename){
         /*De constructor leest een .aut bestand filename in.*/
 
     }
 
-    intersection(Automaton aut)
+    public Automaton intersection(Automaton aut)
     {
         /*Deze methode geeft een eindige automaat terug waarvan de taal gelijk is aan de intersectie
         van de taal L1 van de automaat van de klasse en taal L2 van de automaat aut.
