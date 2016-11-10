@@ -96,7 +96,7 @@ public class Automaton
         @Override
         public String toString()
         {
-            return "Edge{" + from + "--" + weigth + "-->" + _finish + '}';
+            return "Edge{" + from + " --- " + weigth + " ---> " + _finish + '}';
         }
     }
 
@@ -108,13 +108,13 @@ public class Automaton
     @Override
     public String toString()
     {
-        String result = "";
+        String result = "{\n";
         result += "Start: " + _start;
         result += "\nFinish: " + _finish;
         result += "\nEdges: ";
         for (Edge edge : _edges)
             result += "\n\t" + edge;
-        result += "\n";
+        result += "\n}";
         return result;
     }
 }
