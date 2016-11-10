@@ -58,5 +58,7 @@ public class AutomatonParser {
         return _automoton;
     }
 
-    public Automaton
+    public void display(){
+        System.out.println(_automoton.toString());
+    }
 }
