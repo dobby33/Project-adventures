@@ -1,4 +1,5 @@
 /* Dit project is gemaakt door Bas Van Assche en Tom Martens*/
+
 public class AutomatonParser {
     dit is
     publ
