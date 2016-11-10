@@ -8,7 +8,7 @@ public class Level1 {
             // autommaat voor minstens twee schatten te vinden
             Automaton aut2 = new Automaton();
             aut2.setStart("1");
-            aut2.setFinish("3");
+            aut2.addFinish("3");
             aut2.addEdge("1", "1", "D"); // <--
             aut2.addEdge("1", "1", "S"); // <--
             aut2.addEdge("1", "1", "A"); // <--
@@ -36,13 +36,14 @@ public class Level1 {
             // autommaat voor het vinden van een sleutel voor je door een deur gaat
             Automaton aut3 = new Automaton();
             aut3.setStart("1");
-            aut3.setFinish("3");
+            aut3.addFinish("1");
+            aut3.addFinish("2");
             aut3.addEdge("1", "1", "D"); // <--
             aut3.addEdge("1", "1", "S"); // <--
             aut3.addEdge("1", "1", "A"); // <--
             aut3.addEdge("1", "1", "R"); // <--
             aut3.addEdge("1", "2", "K"); // KEY --> 2
-            aut3.addEdge("1", "1", "G"); // <--
+            aut3.addEdge("1", "3", "G"); // GATE --> 3
             aut3.addEdge("1", "1", "T"); // <--
 
             aut3.addEdge("2", "2", "D"); // <--
@@ -50,7 +51,7 @@ public class Level1 {
             aut3.addEdge("2", "2", "A"); // <--
             aut3.addEdge("2", "2", "R"); // <--
             aut3.addEdge("2", "2", "K"); // <--
-            aut3.addEdge("2", "3", "G"); // GATE --> 3
+            aut3.addEdge("2", "3", "G"); // <--
             aut3.addEdge("2", "2", "T"); // <--
 
             aut3.addEdge("3", "3", "D"); // <--
@@ -64,14 +65,34 @@ public class Level1 {
             // automaat om na het tegenkomen van een draak in de rivier te springen als je geen zwaard hebt
             Automaton aut4 = new Automaton();
             aut4.setStart("1");
-            aut4.setFinish("3");
-            aut4.addEdge("1", "1", "D"); // <--
-            aut4.addEdge("1", "1", "S"); // <--
+            aut4.addFinish("1");
+            aut4.addFinish("2");
+            aut4.addFinish("4");
+            aut4.addEdge("1", "3", "D"); // DRAGON --> 3
+            aut4.addEdge("1", "2", "S"); // SWORD --> 2
             aut4.addEdge("1", "1", "A"); // <--
             aut4.addEdge("1", "1", "R"); // <--
             aut4.addEdge("1", "1", "K"); // <--
             aut4.addEdge("1", "1", "G"); // <--
             aut4.addEdge("1", "1", "T"); // <--
+
+            aut4.addEdge("2", "2", "D"); // <--
+            aut4.addEdge("2", "2", "S"); // <--
+            aut4.addEdge("2", "2", "A"); // <--
+            aut4.addEdge("2", "2", "R"); // <--
+            aut4.addEdge("2", "2", "K"); // <--
+            aut4.addEdge("2", "2", "G"); // <--
+            aut4.addEdge("2", "2", "T"); // <--
+
+            aut4.addEdge("3", "4", "R"); // RIVER --> 4
+
+            aut4.addEdge("4", "3", "D"); // DRAGON --> 3
+            aut4.addEdge("4", "4", "S"); // SWORD --> 2
+            aut4.addEdge("4", "1", "A"); // --> 1
+            aut4.addEdge("4", "1", "R"); // --> 1
+            aut4.addEdge("4", "1", "K"); // --> 1
+            aut4.addEdge("4", "1", "G"); // --> 1
+            aut4.addEdge("4", "1", "T"); // --> 1
             Automaton result = aut1.intersection(aut2).intersection(aut3).intersection(aut4);
             System.out.println(result.getShortestExample(true));
         }

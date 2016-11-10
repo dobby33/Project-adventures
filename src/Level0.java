@@ -4,7 +4,11 @@ public class Level0 {
             AutomatonParser parse1 = new AutomatonParser("src\\adventure1.aut");
             parse1.parse();
             Automaton aut1 = parse1.automaton();
-            System.out.println(aut1.getShortestExample(true));
+            String shortestPath = aut1.getShortestExample(true);
+            if (shortestPath == null)
+                System.out.println("null");
+            else
+                System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");

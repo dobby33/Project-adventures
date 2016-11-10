@@ -45,7 +45,7 @@ public class AutomatonParser {
                 _automoton.setStart(split[2]);
             }
             else if (split[2].equals("(FINAL)")){
-                _automoton.setFinish(split[0]);
+                _automoton.addFinish(split[0]);
             }
             else {
                 _automoton.addEdge(split[0], split[2], split[1]);

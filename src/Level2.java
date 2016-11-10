@@ -7,7 +7,7 @@ public class Level2 {
 
             Automaton aut2 = new Automaton();
             aut2.setStart("1");
-            aut2.setFinish("3");
+            aut2.addFinish("3");
             aut2.addEdge("1", "2", "T");
             aut2.addEdge("2", "3", "T");
             Automaton result = aut1.intersection(aut2);
