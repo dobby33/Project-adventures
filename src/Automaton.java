@@ -10,7 +10,7 @@ public class Automaton
 
     private List<Edge> _edges;
     private String _start;
-    private String _finish;
+    private List<String> _finish;
     private Boolean _changed;
     private int _numberOfStates;
 
@@ -20,6 +20,7 @@ public class Automaton
     public Automaton()
     {
         _edges = new ArrayList<>();
+        _finish = new ArrayList<>();
         _numberOfStates = 0;
         Changed();
     }
@@ -35,8 +36,12 @@ public class Automaton
     {
         Automaton result = new Automaton();
         result._start = concatStates(_start, aut._start);
-        result._finish = concatStates(_finish, aut._finish);
+        // De finish states combineren
+        for (String state1 : _finish)
+            for (String state2 : aut._finish)
+                result.addFinish(concatStates(state1, state2));
 
+        // De edges combineren
         for (Edge edge1: _edges)
             for (Edge edge2 : aut._edges)
                 if (edge1.weigth.equals(edge2.weigth))
@@ -61,9 +66,7 @@ public class Automaton
     {
         if (accept)
         {
-            _minNEdges = getNumberOfStates();
-            _minCombinatie = null;
-            shortestAccept(_start, "", 0);
+            shortestAccept();
             return _minCombinatie;
         }
         else
@@ -83,12 +86,22 @@ public class Automaton
      *
      *  * de combinaties staan in minCombinatie
      */
+    private void shortestAccept()
+    {
+        _minNEdges = getNumberOfStates();
+        _minCombinatie = null;
+        shortestAccept(_start, "", 0);
+    }
+
+    /**
+     * Hierop wordt de recurtie gedaan, eerste keer functie zonder parameters aanroepen
+     */
     private void shortestAccept(String state, String combinatie, int nEdges)
     {
         if (nEdges >= _minNEdges)
             return;
-        if (state.equals(_finish))  // en nEdges is kleiner den _minEdges
-        {
+        if (_finish.contains(state))  // en nEdges is kleiner den _minEdges
+        { // State is een accept state
             _minCombinatie = combinatie;
             _minNEdges = nEdges;
             return;
@@ -100,7 +113,6 @@ public class Automaton
                 shortestAccept(edge.to, combinatie + edge.weigth, nEdges);
             else if (edge.from.equals(state))
                 shortestAccept(edge.to, combinatie + edge.weigth, nEdges+1);
-
         }
     }
 
@@ -122,9 +134,9 @@ public class Automaton
         Changed();
     }
 
-    public void setFinish(String finish)
+    public void addFinish(String finish)
     {
-        _finish = finish;
+        _finish.add(finish);
         Changed();
     }
 
