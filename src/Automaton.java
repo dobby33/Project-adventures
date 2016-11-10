@@ -59,7 +59,7 @@ public class Automaton
     {
         if (accept)
         {
-            _minNEdges = 0;
+            _minNEdges = getNumberOfStates();
             _minCombinatie = "";
             shortestAccept(_start, "", 0);
             return _minCombinatie;
@@ -145,7 +145,7 @@ public class Automaton
         @Override
         public String toString()
         {
-            return "Edge{" + from + " \t--- " + weigth + " ---> " + _finish + '}';
+            return "Edge{" + from + "  \t--- " + weigth + " ---> " + _finish + '}';
         }
     }
 
