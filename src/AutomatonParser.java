@@ -14,6 +14,7 @@ public class AutomatonParser {
         /*De constructor leest een .aut bestand filename in.*/
 
         _automoton = new Automaton();
+        _fileLines = new ArrayList<>();
         try {
             FileReader fileReader = new FileReader(filename);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
