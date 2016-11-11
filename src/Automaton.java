@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -6,23 +7,20 @@ import java.util.List;
  */
 public class Automaton
 {
-    // TODO: changed: numberofstates en shortest
-
     private List<Edge> _edges;
     private String _start;
     private List<String> _finish;
-    private Boolean _changed;
-    private int _numberOfStates;
+    private HashSet<String> _states;
 
     private String _minCombinatie;
     private int _minNEdges;
+    private int _result;
 
     public Automaton()
     {
         _edges = new ArrayList<>();
         _finish = new ArrayList<>();
-        _numberOfStates = 0;
-        Changed();
+        _states = new HashSet<>();
     }
 
     /**
@@ -42,14 +40,10 @@ public class Automaton
                 result.addFinish(concatStates(state1, state2));
 
         // De edges combineren
-        for (Edge edge1: _edges)
+        for (Edge edge1 : _edges)
             for (Edge edge2 : aut._edges)
-                if (edge1.weigth.equals(edge2.weigth))
-                    result.addEdge(
-                            concatStates(edge1.from, edge2.from),
-                            concatStates(edge1.to, edge2.to),
-                            edge1.weigth
-                    );
+                if (edge1.getWeigth().equals(edge2.getWeigth()))
+                    result.addEdge(concatStates(edge1.getFrom(), edge2.getFrom()), concatStates(edge1.getTo(), edge2.getTo()), edge1.getWeigth());
         return result;
     }
 
@@ -68,8 +62,7 @@ public class Automaton
         {
             shortestAccept();
             return _minCombinatie;
-        }
-        else
+        } else
         {
             return null;
         }
@@ -77,14 +70,14 @@ public class Automaton
 
     /**
      * Bij de eerste aanroep is
-     *      private String _minCombinatie = null
-     *      private int _minNEdges = het aantal edges
-     *
-     *      nEdges = 0
-     *      state = startstate
-     *      combinatie = ""
-     *
-     *  * de combinaties staan in minCombinatie
+     * private String _minCombinatie = null
+     * private int _minNEdges = het aantal edges
+     * <p>
+     * nEdges = 0
+     * state = startstate
+     * combinatie = ""
+     * <p>
+     * * de combinaties staan in minCombinatie
      */
     private void shortestAccept()
     {
@@ -109,70 +102,59 @@ public class Automaton
 
         for (Edge edge : _edges)
         {
-            if (edge.from.equals(state) && "$".equals(edge.weigth))
-                shortestAccept(edge.to, combinatie + edge.weigth, nEdges);
-            else if (edge.from.equals(state))
-                shortestAccept(edge.to, combinatie + edge.weigth, nEdges+1);
+            if (edge.getFrom().equals(state) && "$".equals(edge.getWeigth()))
+                shortestAccept(edge.getTo(), combinatie + edge.getWeigth(), nEdges);
+            else if (edge.getFrom().equals(state))
+                shortestAccept(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1);
         }
     }
 
-    /**
-     * Voegt een nieuwe state toe aan de automaat
-     * @param from : De String state vanwaar de boog vertrekt
-     * @param to : De string van de aankomst state
-     * @param weight : De string die het karakter voorstelt
-     */
-    public void addEdge(String from, String to, String weight)
+    public List<Edge> getEdges()
     {
-        Changed();
-        _edges.add(new Edge(from, to, weight));
+        return _edges;
+    }
+
+    public String getStart()
+    {
+        return _start;
     }
 
     public void setStart(String start)
     {
         _start = start;
-        Changed();
+        _states.add(start);
+    }
+
+    public List<String> getFinish()
+    {
+        return _finish;
+    }
+
+    public HashSet<String> getStates()
+    {
+        return _states;
+    }
+
+    /**
+     * Voegt een nieuwe state toe aan de automaat
+     *
+     * @param from   : De String state vanwaar de boog vertrekt
+     * @param to     : De string van de aankomst state
+     * @param weight : De string die het karakter voorstelt
+     */
+    public void addEdge(String from, String to, String weight)
+    {
+        _edges.add(new Edge(from, to, weight));
+        _states.add(from);
+        _states.add(to);
     }
 
     public void addFinish(String finish)
     {
         _finish.add(finish);
-        Changed();
+        _states.add(finish);
     }
 
-    public void PrintInFileStructure()
-    {
-        System.out.println("(START) |- " + _start);
-        for (Edge edge : _edges)
-            System.out.println(edge.from + " " + edge.weigth + " " + edge.to);
-        System.out.println(_finish + " -| (FINAL)");
-    }
-
-
-    private void Changed()
-    {
-        _changed = true;
-    }
-
-    private class Edge
-    {
-        Edge(String from, String to, String weigth)
-        {
-            this.from = from;
-            this.to = to;
-            this.weigth = weigth;
-        }
-
-        String from;
-        String to;
-        String weigth;
-
-        @Override
-        public String toString()
-        {
-            return "Edge{" + from + "  \t--- " + weigth + " ---> " + _finish + '}';
-        }
-    }
 
     /***
      * Voegt twee states aan elkaar
@@ -182,19 +164,15 @@ public class Automaton
      */
     private String concatStates(String x, String y)
     {
-        return "(" + x + "," + y + ")";
+        return "<" + x + "," + y + ">";
     }
 
     private int getNumberOfStates()
     {
-        if (_changed)
-        {
-            _numberOfStates = 0;
-            for (Edge edge : _edges)
-                _numberOfStates++;
-        }
-        _changed = false;
-        return _numberOfStates;
+        int _result = 0;
+        for (Edge edge : _edges)
+            _result++;
+        return _result;
     }
 
 
