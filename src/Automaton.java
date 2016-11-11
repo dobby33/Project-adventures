@@ -140,6 +140,14 @@ public class Automaton
         Changed();
     }
 
+    public void PrintInFileStructure()
+    {
+        System.out.println("(START) |- " + _start);
+        for (Edge edge : _edges)
+            System.out.println(edge.from + " " + edge.weigth + " " + edge.to);
+        System.out.println(_finish + " -| (FINAL)");
+    }
+
 
     private void Changed()
     {
