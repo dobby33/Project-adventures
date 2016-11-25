@@ -1,6 +1,2 @@
 *.xml
 *.iml
-.idea/
-out/
-src/AutomatonViewer.java
-src/TestingMain.java
