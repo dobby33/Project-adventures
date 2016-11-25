@@ -5,7 +5,7 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        TestLevels();
+        ShowDetailts(LoadInTest2());
     }
 
     static private void ShowAllDetails()
@@ -85,6 +85,7 @@ public class TestingMain
         aut1.addEdge("2", "2", "b");
         aut1.setStart("1");
         aut1.addFinish("1");
+        aut1.addFinish("2");
 
 
         aut2.addEdge("1", "2", "a");
@@ -95,6 +96,7 @@ public class TestingMain
         aut2.addEdge("3", "3", "b");
         aut2.setStart("1");
         aut2.addFinish("1");
+        aut2.addFinish("2");
 
         return aut1.intersection(aut2);
     }

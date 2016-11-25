@@ -70,96 +70,32 @@ public class Automaton
      */
     public String getShortestExample(Boolean accept)
     {
-        if (accept) {
-            shortestAccept();
-            return _minCombinatie;
-        } else {
-            shortestNotAccept();
-            return _minCombinatie;
-        }
-    }
-
-    /**
-     * Deze functie moet opgeroepen worden wanneer men het kortste pad wil vinden in de automaat
-     * dat niet wordt geaccepteerd.
-     *
-     * Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
-     * Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
-     */
-    private void shortestNotAccept()
-    {
-        _minNEdges = getNumberOfStates();   // We willen geen pad dat langer is dan het aantal states
-        _minCombinatie = null;  // Als er geen korste pad wordt gevonden wordt er null terug gegeven
-        shortestNotAccept(_start, "", 0);
-    }
-
-    /**
-     * Deze functie zoekt door middle van recursie het kortste pad in de automaat dat niet wordt geaccepteerd. De eerste keer moet men deze functie aanroepen zonder paramters
-     * @param state : de huidige state
-     * @param combinatie : Het pad dat we tot nu toe hebben
-     * @param nEdges : het aantal egdes dat we reeds zij gepasseerd
-     *
-     * Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
-     * Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
-     */
-    private void shortestNotAccept(String state, String combinatie, int nEdges)
-    {
-        if (nEdges >= _minNEdges) // Als we al een korter pad hebben gevonden
-            return;
-        if (!_finish.contains(state))  // Als er een kleinere combinatie is gevonden
-        {
-            // Deze string wordt niet geaccepteerd
-            _minNEdges = nEdges;
-            _minCombinatie = combinatie;
-            return;
-        }
-
-        // Als het wel een accept state is
-        // We gaan alle nieuwe edges af
-        for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
-            if (edge.getFrom().equals(state) && "$".equals(edge.getWeigth()))   // als het een lege string is
-                shortestNotAccept(edge.getTo(), combinatie, nEdges + 1);
-            else if (edge.getFrom().equals(state))
-                shortestNotAccept(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1);
-        }
-
-    }
-
-    /**
-     * Bij de eerste aanroep is
-     * private String _minCombinatie = null
-     * private int _minNEdges = het aantal edges
-     * <p>
-     * nEdges = 0
-     * state = startstate
-     * combinatie = ""
-     * <p>
-     * * de combinaties staan in minCombinatie
-     */
-    private void shortestAccept()
-    {
         _minNEdges = getNumberOfStates();  // We zeggen dat het te zoeken pad kleiner moet zijn dan het aantal states
         _minCombinatie = null;  // Als er geen combinatie wordt gevonden zal er dus null in het resultaat staan
-        shortestAccept(_start, "", 0, new HashSet<>());
+        shortestExample(_start, "", 0, new HashSet<>(), accept);
+        return _minCombinatie;
     }
+
 
     /**
      * Hierop wordt de recursie gedaan, eerste keer functie zonder parameters aanroepen
      * @param state      : Het label van de huidige state
      * @param combinatie : De labels van de edges achterelkaar die we tot nu toe hebben
      * @param nEdges : De hoeveelheid edges die we reeds hebben gedaan.
-*
-* Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
-* Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
-     * @param doneStates
+    *
+    * Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
+    * Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
+     * @param doneStates : De states die we al zijn gepasseerd
+     * @param accept : als de de string moet geaccepteerd worden ja of nee
      */
-    private void shortestAccept(String state, String combinatie, int nEdges, HashSet<String> doneStates)
+    private void shortestExample(String state, String combinatie, int nEdges, HashSet<String> doneStates,
+                                 boolean accept)
     {
         _counter++;
         if (nEdges >= _minNEdges)  // Als we al een combinatie hebben die korter is dan deze combinatie
             return;
 
-        if (_finish.contains(state)) // Als er een kleinere combinatie is gevonden
+        if ((accept && _finish.contains(state)) || (!accept && !_finish.contains(state))) // Als er een kleinere combinatie is gevonden
         { // State is een accept state
             _minCombinatie = String.join("", combinatie);
             _minNEdges = nEdges;
@@ -174,9 +110,9 @@ public class Automaton
         // We moeten dus nog edges toevoegen
         for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
             if (edge.getFrom().equals(state) && "$".equals(edge.getWeigth()))   // als het een lege string is
-                shortestAccept(edge.getTo(), combinatie, nEdges + 1, doneStates);
+                shortestExample(edge.getTo(), combinatie, nEdges + 1, doneStates, accept);
             else if (edge.getFrom().equals(state))
-                shortestAccept(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates);
+                shortestExample(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates, accept);
         }
 
         doneStates.remove(state);   // We gaan een stap terug dus de state moet er terug uit
