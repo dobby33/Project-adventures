@@ -38,12 +38,12 @@ public class AutomatonViewer
             outFile.println("Start [shape=plaintext,label=\"\"];\nStart -> " + _automaton.getStart());
 
             /* Toevoegen van states */
-            for (String state : _automaton.getStates())
+            for (State state : _automaton.getStates().values())
             {
-                if (_automaton.getFinish().contains(state))
-                    outFile.println(state + " [shape=doublecircle,label=\""+ state + "\"];");
+                if (_automaton.getFinish().contains(state.getLabel()))
+                    outFile.println(state.getLabel() + " [shape=doublecircle,label=\""+ state.getLabel() + "\"];");
                 else
-                    outFile.println(state + " [shape=circle,label=\""+ state + "\"];");
+                    outFile.println(state.getLabel() + " [shape=circle,label=\""+ state.getLabel() + "\"];");
 
             }
 

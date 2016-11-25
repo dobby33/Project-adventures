@@ -5,9 +5,7 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut").intersection(
-                LoadInAutomaton("jump_river_or_sword.aut").intersection(
-                        LoadInAutomaton("min_two_treasure_after_last_arc.aut"))));
+        TestLevels();
     }
 
     static private void ShowAllDetails()
