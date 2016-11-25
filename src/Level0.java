@@ -1,7 +1,7 @@
 public class Level0 {
     public static void main(String [] args){
         try {
-            AutomatonParser parse1 = new AutomatonParser("src\\adventure1.aut");
+            AutomatonParser parse1 = new AutomatonParser("adventure.aut");
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(true);
