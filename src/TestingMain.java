@@ -5,15 +5,34 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        // autommaat voor minstens twee schatten te vinden
+        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut").intersection(
+                LoadInAutomaton("jump_river_or_sword.aut").intersection(
+                        LoadInAutomaton("two_treasures.aut"))));
+    }
 
-        Automaton result = LoadInTest5();
-        System.out.println("Korst geaccepteerd: " + result.getShortestExample(true));
-        System.out.println("Korst niet geaccepteerd: " + result.getShortestExample(false));
+    static private void ShowAllDetails()
+    {
+        //        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut"));
+        //        ShowDetailts(LoadInAutomaton("jump_river_or_sword.aut"));
+        //        ShowDetailts(LoadInAutomaton("min_two_treasure_after_last_arc.aut"));
+        //        ShowDetailts(LoadInAutomaton("two_treasures.aut"));
+    }
 
-        AutomatonViewer view = new AutomatonViewer(result);
-//        view.PrintInAutFormat();
-//        view.SavePs("..\\Intersection.ps");
+    static private void ShowDetailts(Automaton a)
+    {
+        System.out.println("Korst geaccepteerd: " + a.getShortestExample(true));
+        System.out.println("Korst niet geaccepteerd: " + a.getShortestExample(false));
+
+        AutomatonViewer view = new AutomatonViewer(a);
+        view.PrintInAutFormat();
+        view.SavePs("..\\Intersection.ps");
+    }
+
+    static private void TestLevels()
+    {
+        Level0.main(new String[]{});
+        Level1.main(new String[]{});
+        Level2.main(new String[]{});
     }
 
     static private Automaton LoadInTest1()
@@ -45,6 +64,17 @@ public class TestingMain
         return aut1.intersection(aut2);
     }
 
+    private static Automaton LoadInAutomaton(String filename)
+    {
+        AutomatonParser parse = new AutomatonParser(filename);
+        try {
+            parse.parse();
+        } catch (Exception e) {
+            return null;
+        }
+        return parse.automaton();
+    }
+
     private static Automaton LoadInTest2()
     {
         Automaton aut1 = new Automaton();
@@ -72,7 +102,9 @@ public class TestingMain
     }
 
 
-    /** Deze automaat heeft geen eindtoestaden */
+    /**
+     * Deze automaat heeft geen eindtoestaden
+     */
     private static Automaton LoadInTest3()
     {
         Automaton aut1 = new Automaton();
@@ -89,7 +121,9 @@ public class TestingMain
         return aut1;
     }
 
-    /** Deze automaat heeft enkel eindtoestanden */
+    /**
+     * Deze automaat heeft enkel eindtoestanden
+     */
     private static Automaton LoadInTest4()
     {
         Automaton aut1 = new Automaton();
@@ -111,7 +145,7 @@ public class TestingMain
     /**
      * Deze automaat accepteerd een aantal a's + een aantal b's
      * Niet deterministische automaat
-     * */
+     */
     private static Automaton LoadInTest5()
     {
         Automaton aut1 = new Automaton();

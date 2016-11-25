@@ -50,7 +50,7 @@ public class AutomatonViewer
             
             /* Toevoegen van bogen */
             for (Edge edge : _automaton.getEdges())
-                if (!edge.getFrom().equals(edge.getTo()))
+//                if (!edge.getFrom().equals(edge.getTo()))
                     outFile.println(edge.getFrom() + " -> " + edge.getTo() + " [label=\"" + edge.getWeigth() + "\"]");
 
             /* Close file */
