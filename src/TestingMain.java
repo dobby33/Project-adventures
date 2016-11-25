@@ -7,7 +7,7 @@ public class TestingMain
     {
         ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut").intersection(
                 LoadInAutomaton("jump_river_or_sword.aut").intersection(
-                        LoadInAutomaton("two_treasures.aut"))));
+                        LoadInAutomaton("min_two_treasure_after_last_arc.aut"))));
     }
 
     static private void ShowAllDetails()
