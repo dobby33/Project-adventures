@@ -21,15 +21,20 @@ public class Automaton
      */
     private HashMap<String, State> _states;
 
+    /**
+     * Alle karakters uit de automaat
+     */
+    private HashSet<String> _alfabeth;
+
     /* Dit zijn variabele voor het zoeken van het korste pad */
     private String _minCombinatie;
     private int _minNEdges;
-    private HashSet<String> _alfabeth;
 
     public Automaton()
     {
         _finish = new HashSet<>();
         _states = new HashMap<>();
+        _alfabeth = new HashSet<>();
     }
 
     /**
@@ -78,7 +83,7 @@ public class Automaton
         } else {
             _minNEdges = getNumberOfStates();  // We zeggen dat het te zoeken pad kleiner moet zijn dan het aantal states
             _minCombinatie = null;  // Als er geen combinatie wordt gevonden zal er dus null in het resultaat staan
-            shortestAcceptString(_start, "", 0, new HashSet<>());
+            shortestNotAcceptString(_start, "", 0, new HashSet<>());
             return _minCombinatie;
         }
     }
@@ -178,7 +183,7 @@ public class Automaton
      */
     public boolean isAcceped(String string)
     {
-        return isAcceped(_start, string);
+        return isAcceped(_start, string, new ArrayList<>());
     }
 
     /**
@@ -186,20 +191,26 @@ public class Automaton
      * Deze functie moet de eerste keer aangeroepen worden met state=startstate
      * @param charsToTest : the string to test
      * @param state : de huidige state
+     * @param edges : de edges die we al zijn tegengekomen
      * @return true if accepted, else false.
      */
-    private boolean isAcceped(String state, String charsToTest)
+    private boolean isAcceped(String state, String charsToTest, List<Edge> edges)
     {
+        if (containtsEpisilonLoop(edges))   // Als een loop van epsilons
+            return false;
+
         // Bij een lege string kijken of de string wordt geaccepteerd
         if (charsToTest.length() == 0 && _finish.contains(state))
             return true;
         // Bij een lege string en geen finish state
         else if (charsToTest.length() == 0) {   // Kijken voor epsilon
             for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
-                if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest))
+                edges.add(edge);
+                if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest, edges))
                     return true;
+                edges.remove(edges.size()-1);
             }
-            return false;   // Geen legestring overgangen
+            return false;   // Geen lege string overgangen
         }
 
         // Als het niet de lege string is
@@ -207,9 +218,27 @@ public class Automaton
         String testChar = charsToTest.substring(0, 1);
 
         for (Edge edge: _states.get(state).getEdgesStartingFromHere()) {
-            if (edge.getWeigth().equals(testChar) && isAcceped(edge.getTo(), charsToTest.substring(1)))
+            edges.add(edge);
+            if (edge.getWeigth().equals(testChar) && isAcceped(edge.getTo(), charsToTest.substring(1), edges))
                 return true;
-            if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest))
+            if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest, edges))
+                return true;
+            edges.remove(edges.size()-1);
+        }
+        return false;
+    }
+
+    /**
+     * @pre : Behalve het laatste element bevat de lijst geen loops.
+     * @param edges :
+     * @return true/false
+     */
+    private boolean containtsEpisilonLoop(List<Edge> edges)
+    {
+        for (int i = edges.size() - 1; i >= 0; i--) {
+            if (!edges.get(i).getWeigth().equals("$"))
+                return false;
+            if (edges.get(i).getFrom().equals(edges.get(edges.size()-1).getTo()))
                 return true;
         }
         return false;
@@ -311,6 +340,11 @@ public class Automaton
     {
         addState(state);
         _states.get(state).getEdgesStartingFromHere().add(edge);
+    }
+
+    public void setAlfabeth(HashSet<String> alfabeth)
+    {
+        _alfabeth = alfabeth;
     }
 
     @Override

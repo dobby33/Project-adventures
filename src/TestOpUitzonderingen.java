@@ -6,10 +6,7 @@ public class TestOpUitzonderingen {
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(false);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
+            System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
@@ -22,10 +19,7 @@ public class TestOpUitzonderingen {
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(false);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
+            System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
@@ -38,10 +32,7 @@ public class TestOpUitzonderingen {
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(false);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
+            System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
@@ -54,10 +45,7 @@ public class TestOpUitzonderingen {
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(false);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
+            System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
@@ -70,10 +58,7 @@ public class TestOpUitzonderingen {
             parse1.parse();
             Automaton aut1 = parse1.automaton();
             String shortestPath = aut1.getShortestExample(false);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
+            System.out.println(shortestPath);
         }
         catch (Exception e){
             System.out.print("Error : ");
