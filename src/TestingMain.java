@@ -5,9 +5,7 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut").intersection(
-                LoadInAutomaton("jump_river_or_sword.aut").intersection(
-                        LoadInAutomaton("min_two_treasure_after_last_arc.aut"))));
+        ShowDetailts(LoadInTest2());
     }
 
     static private void ShowAllDetails()
@@ -87,6 +85,7 @@ public class TestingMain
         aut1.addEdge("2", "2", "b");
         aut1.setStart("1");
         aut1.addFinish("1");
+        aut1.addFinish("2");
 
 
         aut2.addEdge("1", "2", "a");
@@ -97,6 +96,7 @@ public class TestingMain
         aut2.addEdge("3", "3", "b");
         aut2.setStart("1");
         aut2.addFinish("1");
+        aut2.addFinish("2");
 
         return aut1.intersection(aut2);
     }
