@@ -24,7 +24,6 @@ public class Automaton
     /* Dit zijn variabele voor het zoeken van het korste pad */
     private String _minCombinatie;
     private int _minNEdges;
-    public int _counter;
 
     public Automaton()
     {
@@ -91,7 +90,6 @@ public class Automaton
     private void shortestExample(String state, String combinatie, int nEdges, HashSet<String> doneStates,
                                  boolean accept)
     {
-        _counter++;
         if (nEdges >= _minNEdges)  // Als we al een combinatie hebben die korter is dan deze combinatie
             return;
 
