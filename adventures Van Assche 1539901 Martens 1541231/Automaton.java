@@ -107,9 +107,9 @@ public class Automaton
         // 'state' is nog geen accept state
         // We moeten dus nog edges toevoegen
         for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
-            if (edge.getFrom().equals(state) && "$".equals(edge.getWeigth()))   // als het een lege string is
+            if ("$".equals(edge.getWeigth()))   // als het een lege string is
                 shortestExample(edge.getTo(), combinatie, nEdges + 1, doneStates, accept);
-            else if (edge.getFrom().equals(state))
+            else
                 shortestExample(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates, accept);
         }
 
