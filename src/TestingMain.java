@@ -5,25 +5,26 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        ShowDetailts(LoadInAutomaton("jump_river_or_sword.aut"));
+        TestLevels();
+        ShowDetailts(LoadInAutomaton("adventure.aut"));
     }
 
     static private void ShowAllDetails()
     {
-        //        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut"));
-        //        ShowDetailts(LoadInAutomaton("jump_river_or_sword.aut"));
-        //        ShowDetailts(LoadInAutomaton("min_two_treasure_after_last_arc.aut"));
-        //        ShowDetailts(LoadInAutomaton("two_treasures.aut"));
+        ShowDetailts(LoadInAutomaton("find_key_before_opening_door.aut"));
+        ShowDetailts(LoadInAutomaton("jump_river_or_sword.aut"));
+        ShowDetailts(LoadInAutomaton("min_two_treasure_after_last_arc.aut"));
+        ShowDetailts(LoadInAutomaton("two_treasures.aut"));
     }
 
     static private void ShowDetailts(Automaton a)
     {
         System.out.println("Korst geaccepteerd: " + a.getShortestExample(true));
         System.out.println("Korst niet geaccepteerd: " + a.getShortestExample(false));
-
-        AutomatonViewer view = new AutomatonViewer(a);
-        view.PrintInAutFormat();
-        view.SavePs("..\\Intersection.ps");
+//
+//        AutomatonViewer view = new AutomatonViewer(a);
+//        view.PrintInAutFormat();
+//        view.SavePs("..\\Intersection.ps");
     }
 
     static private void TestLevels()

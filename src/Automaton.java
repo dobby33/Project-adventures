@@ -24,6 +24,7 @@ public class Automaton
     /* Dit zijn variabele voor het zoeken van het korste pad */
     private String _minCombinatie;
     private int _minNEdges;
+    private HashSet<String> _alfabeth;
 
     public Automaton()
     {
@@ -69,15 +70,23 @@ public class Automaton
      */
     public String getShortestExample(Boolean accept)
     {
-        _minNEdges = getNumberOfStates();  // We zeggen dat het te zoeken pad kleiner moet zijn dan het aantal states
-        _minCombinatie = null;  // Als er geen combinatie wordt gevonden zal er dus null in het resultaat staan
-        shortestExample(_start, "", 0, new HashSet<>(), accept);
-        return _minCombinatie;
+        if (accept) {
+            _minNEdges = getNumberOfStates();  // We zeggen dat het te zoeken pad kleiner moet zijn dan het aantal states
+            _minCombinatie = null;  // Als er geen combinatie wordt gevonden zal er dus null in het resultaat staan
+            shortestAcceptString(_start, "", 0, new HashSet<>());
+            return _minCombinatie;
+        } else {
+            _minNEdges = getNumberOfStates();  // We zeggen dat het te zoeken pad kleiner moet zijn dan het aantal states
+            _minCombinatie = null;  // Als er geen combinatie wordt gevonden zal er dus null in het resultaat staan
+            shortestAcceptString(_start, "", 0, new HashSet<>());
+            return _minCombinatie;
+        }
     }
 
 
     /**
      * Hierop wordt de recursie gedaan, eerste keer functie zonder parameters aanroepen
+     * De functie berekend het kortste pad dat geaccepteerd wordt.
      * @param state      : Het label van de huidige state
      * @param combinatie : De labels van de edges achterelkaar die we tot nu toe hebben
      * @param nEdges : De hoeveelheid edges die we reeds hebben gedaan.
@@ -85,17 +94,15 @@ public class Automaton
     * Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
     * Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
      * @param doneStates : De states die we al zijn gepasseerd
-     * @param accept : als de de string moet geaccepteerd worden ja of nee
      */
-    private void shortestExample(String state, String combinatie, int nEdges, HashSet<String> doneStates,
-                                 boolean accept)
+    private void shortestAcceptString(String state, String combinatie, int nEdges, HashSet<String> doneStates)
     {
         if (nEdges >= _minNEdges)  // Als we al een combinatie hebben die korter is dan deze combinatie
             return;
 
-        if ((accept && _finish.contains(state)) || (!accept && !_finish.contains(state))) // Als er een kleinere combinatie is gevonden
+        if (_finish.contains(state)) // Als er een kleinere combinatie is gevonden
         { // State is een accept state
-            _minCombinatie = String.join("", combinatie);
+            _minCombinatie = combinatie;
             _minNEdges = nEdges;
             return;
         }
@@ -107,13 +114,105 @@ public class Automaton
         // 'state' is nog geen accept state
         // We moeten dus nog edges toevoegen
         for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
-            if (edge.getFrom().equals(state) && "$".equals(edge.getWeigth()))   // als het een lege string is
-                shortestExample(edge.getTo(), combinatie, nEdges + 1, doneStates, accept);
-            else if (edge.getFrom().equals(state))
-                shortestExample(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates, accept);
+            if ("$".equals(edge.getWeigth()))  // als het een lege string is
+                shortestAcceptString(edge.getTo(), combinatie, nEdges + 1, doneStates);
+            else
+                shortestAcceptString(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates);
         }
 
         doneStates.remove(state);   // We gaan een stap terug dus de state moet er terug uit
+    }
+
+    /**
+     * Hierop wordt de recursie gedaan, eerste keer functie zonder parameters aanroepen
+     * De functie berekend het kortste pad dat niet geaccepteerd wordt.
+     * @param state      : Het label van de huidige state
+     * @param combinatie : De labels van de edges achterelkaar die we tot nu toe hebben
+     * @param nEdges : De hoeveelheid edges die we reeds hebben gedaan.
+     *
+     * Het resultaat wordt opgeslagen in {@link Automaton#_minCombinatie}
+     * Het aantal adges van dit resulaat staat in {@link Automaton#_minNEdges}
+     * @param doneStates : De states die we al zijn gepasseerd
+     */
+    private void shortestNotAcceptString(String state, String combinatie, int nEdges, HashSet<String> doneStates)
+    {
+        if (nEdges >= _minNEdges)  // Als we al een combinatie hebben die korter is dan deze combinatie
+            return;
+
+        if (!_finish.contains(state)) // Als er een kleinere combinatie is gevonden
+        { // State is een accept state
+            if (!isAcceped(combinatie)) {
+                _minCombinatie = combinatie;
+                _minNEdges = nEdges;
+            }
+            return;
+        }
+
+        if (doneStates.contains(state))         // Als we de state al hebben gehad kunnen we stoppen
+            return;
+
+        doneStates.add(state);  // Voeg toe aan de states die we al zijn gepasseerd
+        HashSet<String> alfabeth = new HashSet<>(_alfabeth);
+        // We moeten dus nog edges toevoegen
+        for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
+            if ("$".equals(edge.getWeigth()))  // als het een lege string is
+                shortestNotAcceptString(edge.getTo(), combinatie, nEdges + 1, doneStates);
+            else
+                shortestNotAcceptString(edge.getTo(), combinatie + edge.getWeigth(), nEdges + 1, doneStates);
+            alfabeth.remove(edge.getWeigth());  // Verwijder dit karakter uit het alfabeth
+        }
+        // Test de karakters uit het alfabeth die niet uit deze state vertrekken.
+        for (String charater : alfabeth) {
+            if (!isAcceped(combinatie + charater)) {
+                _minCombinatie = combinatie + charater;
+                _minNEdges = nEdges + 1;
+            }
+        }
+        doneStates.remove(state);   // We gaan een stap terug dus de state moet er terug uit
+    }
+
+    /**
+     * This funcion tests if the string is accepted.
+     * @param string : the string to test
+     * @return true if accepted, else false.
+     */
+    public boolean isAcceped(String string)
+    {
+        return isAcceped(_start, string);
+    }
+
+    /**
+     * This funcion tests if the string is accepted.
+     * Deze functie moet de eerste keer aangeroepen worden met state=startstate
+     * @param charsToTest : the string to test
+     * @param state : de huidige state
+     * @return true if accepted, else false.
+     */
+    private boolean isAcceped(String state, String charsToTest)
+    {
+        // Bij een lege string kijken of de string wordt geaccepteerd
+        if (charsToTest.length() == 0 && _finish.contains(state))
+            return true;
+        // Bij een lege string en geen finish state
+        else if (charsToTest.length() == 0) {   // Kijken voor epsilon
+            for (Edge edge : _states.get(state).getEdgesStartingFromHere()) {
+                if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest))
+                    return true;
+            }
+            return false;   // Geen legestring overgangen
+        }
+
+        // Als het niet de lege string is
+        // Volgende karakter bekijken, en de epsilon
+        String testChar = charsToTest.substring(0, 1);
+
+        for (Edge edge: _states.get(state).getEdgesStartingFromHere()) {
+            if (edge.getWeigth().equals(testChar) && isAcceped(edge.getTo(), charsToTest.substring(1)))
+                return true;
+            if (edge.getWeigth().equals("$") && isAcceped(edge.getTo(), charsToTest))
+                return true;
+        }
+        return false;
     }
 
 
@@ -161,6 +260,7 @@ public class Automaton
     {
         addEdgeToState(from, new Edge(from, to, weight));      // gaat 'from' enkel toevoegen als 'from' er nog niet in zit
         addState(to);      // hetzelfde voor 'to'
+        _alfabeth.add(weight);
     }
 
     /**
