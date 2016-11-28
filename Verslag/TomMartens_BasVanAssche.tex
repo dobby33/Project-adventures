@@ -120,6 +120,8 @@
 	
 	\section{Problemen}
 		Na het implementeren van de levels kwamen tot de conclusie dat bij adventure 1 in level 2 we niet tot een resultaat kwamen. We kwamen tot de conclusie dat er enorm veel berekend moest worden omdat de automaat na intersectie meer dan 500 nodes groot is. We hebben geprobeerd dit op te lossen door de deelautomaten kleiner te maken. Maar het algoritme versnelde niet genoeg om in redelijke tijd een resultaat te krijgen. We hebben dit probleem opgelost door de implementatie van $getShortestExample()$ aan te passen. Wanneer men een node voor de tweede keer tegenkomt weten we dat het huidige pad niet tot een kortste oplossing kan komen. Wanneer men een node meermaals tegenkomt zit er een loop in het pad en bestaat er dus een korter pad dat deze loop niet bevat.
+		
+		Een tweede probleem dat we soms foutieve oplossingen gaven bij automaten met epsilon-pijlen. We hadden er geen rekening mee gehouden dat een string op de ene plaatst geaccepteerd kan worden en op de andere niet. En ook dat we niet naar het volledige alfabet gingen kijken per node. Om dit probleem op te lossen hebben we een functie geschreven die test of een bepaalde string wordt geaccepteerd. Zo konden we vermijden dat we een string als niet geaccepteerd beschouwden, wanneer deze op een andere plaats wel geaccepteerd wordt.
 	
 	
 	
