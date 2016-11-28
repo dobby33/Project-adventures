@@ -61,63 +61,65 @@
 		Deze klasse stelt een edge voor uit de automaat met een start-state, een finish-state en een symbool.
 		
 		\textbf{Class AutomatonParser:}
-		Deze klasse kan van een automaat inlezen uit een bestand en die automaat kan dan ook opgevraagd worden.
+		Deze klasse kan een automaat inlezen vanuit een bestand en die automaat kan dan ook opgevraagd worden.
 		
 		\textbf{Class Level0:}
 		Bij level 0 wordt het kortste pad van een automaat gegeven en indien er geen pad is wordt er “null” gegeven.
 		
 		\textbf{Class Level1:}
-		Bij level 1 wordt het kortste pad van een automaat gegeven waarbij er 2 schatten gevonden zijn, waarbij er pas door een deur gegaan kan worden als een sleutel gevonden is en waarbij er onmiddellijk in de rivier gegaan moet worden als men langs de draak gaat wanneer men geen zwaard heeft.
-		De nodige automaten wordt met de AutomatonParser ingelezen vanuit een file.
+		Bij level 1 wordt het kortste pad van een automaat gegeven waarbij er 2 schatten gevonden zijn. De tweede voorwaarde is dat er een sleutel nodig is om door een deur te gaan. Een de laatste voorwaarde is dat men onmiddellijk in de rivier moet springen wanneer men langs de draak gaat en geen zwaard heeft. De nodige automaten wordt met de AutomatonParser klasse ingelezen vanuit een file.
 		
 		\textbf{Class Level2:}
-		Bij level 2 wordt het kortste pad van een automaat gegeven waarbij er 2 schatten gevonden zijn na het passeren van de laatste boog, waarbij er pas door een deur gegaan kan worden als een sleutel gevonden is en waarbij er onmiddellijk in de rivier gegaan moet worden als men langs de draak gaat wanneer men geen zwaard heeft.
-		Ook hier worden de nodige automaten ingelezen vanuit een file.
+		Bij level 2 is gelijkend aan level 1. Het verschil is dat mem alle reeds gevonden schatten verliest wanneer men door een boog gaat. Ook hier worden de nodige automaten ingelezen vanuit een file.
 		
 		\section{Taakverdeling}
 		De implementatie van de automaat is door Bas geïmplementeerd en de levels en de main klasse zijn door Tom geïmplementeerd.
 		
 		\section{Implementatie van levels}
-		De levels zijn ontworpen om zo weinig mogelijk nodes te bevatten. Level 2 en 3 bestaan uit 3 verschillende automaten die vermenigvuldigd worden. Dus als we dan één node van een deelautomaat kunnen weghalen heeft dat een drastisch verschil op het totaal aantal nodes van de intersectie van het level met de adventure.
+		De levels zijn ontworpen om zo weinig mogelijk nodes te bevatten. Level 1 en 2 bestaan uit 3 verschillende automaten die vermenigvuldigd worden. 
 		
 		Dit zijn de verschillende automaten die we gebruikt hebben voor de levels:
 		
-		\begin{figure}
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.4\linewidth]{2schatten}
 			\caption{Minstens twee schatten vinden.}
 			\label{fig:2schatten}
 		\end{figure}
+		
+		In \fref{fig:2schatten} zien we de automaat die de voorwaarde oplegt twee schatten te vinden. 
 	
 		
-		\begin{figure}
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.3\linewidth]{sleutel}
 			\caption{Sleutel vinden voor je door een deur kan.}
 			\label{fig:sleutel}
 		\end{figure}
 	
+		In \fref{fig:sleutel} zien we de automaat waarbij men een sleutel moet vinden voor het openen van en deur. Dus voor het vinden van de sleutel kan alles gedaan worden behalve door een deur gaan. Na het vinden van de sleutel kunnen wel alle tekens worden gelezen.	
 		
-		\begin{figure}
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.3\linewidth]{draak}
 			\caption{Na het passeren van een draak in het water springen als je geen zwaard hebt.}
 			\label{fig:draak}
 		\end{figure}
 	
+		In \fref{fig:draak} zien we de automaat die beschrijft wat er moet gebeuren bij de draak. De automaat begin in een accept toestand. Wanneer men daarna een draak tegenkomt zal men direct via een rivier moeten gaan om terug een een accept toestand te komen. Na het vinden van een zwaard, wordt deze beperking niet meer opgelegd.
+			
 		
-		\begin{figure}
+		\begin{figure}[H]
 			\centering
 			\includegraphics[width=0.4\linewidth]{boog}
 			\caption{Bij het passeren van een boog speel je alle schatten kwijt.}
 			\label{fig:boog}
 		\end{figure}
 		
-		Als men in level 2 een boog passeert moet men alle schatten verliezen. We hebben dit gecombineerd met het zoeken van de twee schatten zoals in \fref{fig:boog} te zien is.
+		Als men in level 2 een boog passeert moet men alle schatten verliezen. We hebben dit gecombineerd met het zoeken van de twee schatten zoals in \fref{fig:boog} te zien is. We geraken enkel in een eindtoestand door twee of meer schatten te bezitten. Telkens als we een boog passeren gaan we terug naar de begintoestand. Dit komt overeen met het verliezen van de schatten.
 	
 	\section{Problemen}
-		We hadden gemerkt dat adventure 1 bij level 2 zeer lang moet rekenen. Eerst dachten we dat we een fout in onze implementatie hadden, maar na even na te denken bleek dat er enorm veel berekend moest worden omdat de automaat na intersectie meer dan 500 nodes groot is. We hebben daarna nog eens alle onderdelen van de levels overlopen op zoek naar een manier om het aantal nodes te kunnen verminderen. Uiteindelijk hebben we nog 2 nodes kunnen weghalen wat het totaal aantal nodes van adventure 1 op level 2 van 576 naar 288 bracht. Het doorlopen van level 2 is daardoor dus versneld, maar niet genoeg om snel tot een oplossing te komen voor adventure 1.
-		Later merkte Bas op dat het berekenen van adventure 1 level 2 te lang duurt omdat het programma loops gaat maken, maar als er een pad is met een loop is er ook een korter pad zonder loop dus een node mag niet tweemaal voorkomen in één pad. Nadat Bas de implementatie van getShortestExample heeft aangepast ging de berekening zoveel sneller dat adventure 1 level 2 bijna onmiddellijk een oplossing geeft.
+		Na het implementeren van de levels kwamen tot de conclusie dat bij adventure 1 in level 2 we niet tot een resultaat kwamen. We kwamen tot de conclusie dat er enorm veel berekend moest worden omdat de automaat na intersectie meer dan 500 nodes groot is. We hebben geprobeerd dit op te lossen door de deelautomaten kleiner te maken. Maar het algoritme versnelde niet genoeg om in redelijke tijd een resultaat te krijgen. We hebben dit probleem opgelost door de implementatie van $getShortestExample()$ aan te passen. Wanneer men een node voor de tweede keer tegenkomt weten we dat het huidige pad niet tot een kortste oplossing kan komen. Wanneer men een node meermaals tegenkomt zit er een loop in het pad en bestaat er dus een korter pad dat deze loop niet bevat.
 	
 	
 	
