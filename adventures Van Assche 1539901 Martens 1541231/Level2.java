@@ -1,3 +1,6 @@
+import java.util.Arrays;
+import java.util.HashSet;
+
 public class Level2 {
     public static void main(String [] args){
         try {
@@ -14,6 +17,7 @@ public class Level2 {
             Automaton aut5 = getAutomaton("min_two_treasure_after_last_arc.aut");
 
             Automaton result = aut1.intersection(aut3).intersection(aut4).intersection(aut5);
+            result.setAlfabeth(new HashSet<>(Arrays.asList(new String[]{"D", "S", "A", "R", "K", "G", "T"})));
 
             System.out.println(result.getShortestExample(true));
 

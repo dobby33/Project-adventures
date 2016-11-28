@@ -51,6 +51,7 @@ public class AutomatonParser {
                 _automoton.addEdge(split[0], split[2], split[1]);
             }
         }
+
     }
 
     public Automaton automaton(){
