@@ -15,23 +15,8 @@ public class Level2 {
 
             Automaton result = aut1.intersection(aut3).intersection(aut4).intersection(aut5);
 
-<<<<<<< HEAD
-            aut4.addEdge("3", "3", "D"); // <--
-            aut4.addEdge("3", "3", "S"); // <--
-            aut4.addEdge("3", "1", "A"); // ARK --> 1
-            aut4.addEdge("3", "3", "R"); // <--
-            aut4.addEdge("3", "3", "K"); // <--
-            aut4.addEdge("3", "3", "G"); // <--
-            aut4.addEdge("3", "3", "T"); // <--
-            Automaton result = aut1.intersection(aut2).intersection(aut3).intersection(aut4);
-            String shortestPath = result.getShortestExample(true);
-            if (shortestPath == null)
-                System.out.println("null");
-            else
-                System.out.println(shortestPath);
-=======
             System.out.println(result.getShortestExample(true));
->>>>>>> origin/master
+
         }
         catch (Exception e){
             System.out.print("Error : ");

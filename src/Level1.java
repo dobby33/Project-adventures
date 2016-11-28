@@ -13,7 +13,6 @@ public class Level1 {
             // automaat om na het tegenkomen van een draak in de rivier te springen als je geen zwaard hebt
             Automaton aut4 = getAutomaton("jump_river_or_sword.aut");
 
-
             Automaton result = aut1.intersection(aut2).intersection(aut3).intersection(aut4);
 
             System.out.println(result.getShortestExample(true));
