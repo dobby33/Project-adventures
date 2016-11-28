@@ -5,7 +5,7 @@ public class TestingMain
 {
     public static void main(String[] agrs)
     {
-        ShowDetailts(LoadInAutomaton("jump_river_or_sword.aut"));
+        TestLevels();
     }
 
     static private void ShowAllDetails()
